@@ -2,40 +2,42 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 interface ButtonProps {
-  click?: () => void;
   children?: React.ReactNode;
-  rippleEffect?: boolean;
+  background: string;
+  color: string;
 }
 
-const ButtonStyled = styled.button`
+const ButtonStyled = styled.button<ButtonProps>`
   overflow: hidden;
   position: relative;
   user-select: none;
   padding: 12px 24px;
   min-width: 144px;
-  border-radius: 16px;
+  border-radius: 4px;
   border: none;
   outline: none;
-  background-color: #2563eb;
-  color: #efefef;
+  background-color: ${(props) => props.background};
+  color: ${(props) => props.color};
   font-size: 0.9rem;
+  font-weight: 500;
+
+  &:active {
+    transform: scale(0.995);
+  }
 
   & > .ripple-effect {
     position: absolute;
-    background-color: #303030b5;
+    background-color: #f4f4f520;
     height: 10%;
     aspect-ratio: 1 / 1;
-    animation: rippleEffect linear 1000ms forwards;
+    animation: rippleEffect linear 750ms forwards;
     animation-delay: 100ms;
     border-radius: 50%;
     pointer-events: none;
+    transform: scale(0);
   }
 
   @keyframes rippleEffect {
-    0% {
-      transform: scale(1);
-      opacity: 100%;
-    }
     100% {
       transform: scale(100);
       opacity: 0%;
@@ -49,23 +51,21 @@ interface RippleState {
   offsetY: number;
 }
 
-export default function Button({ children }: ButtonProps) {
+export default function Button({ children, background, color }: ButtonProps) {
   const [ripples, setRipples] = useState<Array<RippleState>>([]);
+  const [nextId, setNextId] = useState(0);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { offsetX, offsetY } = event.nativeEvent;
 
-    const ripple = {
-      id: ripples.length,
+    const newRipple: RippleState = {
+      id: nextId,
       offsetX,
       offsetY,
     };
 
-    setRipples((prevState: Array<RippleState>) => [...prevState, ripple]);
-
-    // event.target.addEventListener("animationend", () => {
-    //   setRipples((prevState: Array<RippleState>) => prevState.slice(1));
-    // });
+    setRipples((prevRipples) => [...prevRipples, newRipple]);
+    setNextId((prevId) => prevId + 1);
   };
 
   const handleAnimationEnd = (id: number) => {
@@ -75,22 +75,19 @@ export default function Button({ children }: ButtonProps) {
   };
 
   return (
-    <ButtonStyled onClick={handleClick}>
+    <ButtonStyled onClick={handleClick} background={background} color={color}>
       {children}
-
-      {ripples.map(({ id, offsetX, offsetY }, index) => {
-        return (
-          <span
-            key={index}
-            className="ripple-effect"
-            onAnimationEnd={() => handleAnimationEnd(id)}
-            style={{
-              left: offsetX,
-              top: offsetY,
-            }}
-          ></span>
-        );
-      })}
+      {ripples.map(({ id, offsetX, offsetY }) => (
+        <span
+          key={id}
+          className="ripple-effect"
+          style={{
+            left: offsetX,
+            top: offsetY,
+          }}
+          onAnimationEnd={() => handleAnimationEnd(id)}
+        />
+      ))}
     </ButtonStyled>
   );
 }
