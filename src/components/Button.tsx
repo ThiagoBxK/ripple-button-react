@@ -27,7 +27,7 @@ const ButtonStyled = styled.button<ButtonProps>`
 
   & > .ripple-effect {
     position: absolute;
-    background-color: #f4f4f520;
+    background-color: #f4f4f540;
     height: 10%;
     aspect-ratio: 1 / 1;
     animation: rippleEffect linear 750ms forwards;
