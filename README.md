@@ -1,5 +1,7 @@
 ## Autores
 
+Todos os direitos reservados a: @ThiagoBxK
+
 - [@ThiagoBxK](https://www.github.com/ThiagoBxK)
 
 ## 🚀 Sobre o projeto
