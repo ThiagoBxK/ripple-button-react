@@ -1,13 +1,24 @@
-import Button from "./components/Button";
+import Button from "./components/Button/Button";
 
 function App() {
   return (
     <>
       <div style={{ display: "grid", gridGap: "20px" }}>
-        <Button background="#22c55e" color="#fff">
+        <Button
+          style={{
+            background: "#4f46e5",
+            textColor: "#efefef",
+          }}
+        >
           Continuar
         </Button>
-        <Button background="#b91c1c" color="#efefef">
+
+        <Button
+          style={{
+            background: "#dc2626",
+            textColor: "#efefef",
+          }}
+        >
           Cancelar
         </Button>
       </div>
