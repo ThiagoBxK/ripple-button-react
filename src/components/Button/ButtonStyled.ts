@@ -1,21 +1,27 @@
 import styled from "styled-components";
-import { ButtonProps } from "./ButtonTypes";
 
-export default styled.button<ButtonProps>`
-  overflow: hidden;
+const ButtonStyled = styled.button`
   position: relative;
-  user-select: none;
-  padding: 12px 24px;
-  min-width: 144px;
-  border-radius: 4px;
+  overflow: hidden;
+  background-color: ${({ color }) => color};
+  color: #efefef;
   border-style: none;
-  outline: none;
-  background-color: ${({ style }) => style?.background};
-  color: ${({ style }) => style?.textColor};
+  padding: 12px 18px;
+  border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 500;
 
-  & > .ripple-effect {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.2s;
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  & > .ripple {
     position: absolute;
     background-color: #f4f4f540;
     height: 10%;
@@ -34,3 +40,5 @@ export default styled.button<ButtonProps>`
     }
   }
 `;
+
+export default ButtonStyled;

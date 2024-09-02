@@ -1,25 +1,22 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ButtonProps, RippleState } from "./ButtonTypes";
 import ButtonStyled from "./ButtonStyled";
 
-export default function Button({ onClick, children, style }: ButtonProps) {
+function Button({ children, color }: ButtonProps) {
   const [ripples, setRipples] = useState<Array<RippleState>>([]);
-  const [nextId, setNextId] = useState(0);
+  const [nextId, setNextId] = useState<number>(0);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     const { offsetX, offsetY } = event.nativeEvent;
 
-    const newRipple: RippleState = {
-      id: nextId,
-      offsetX,
-      offsetY,
-    };
-
-    setRipples((prevRipples) => [...prevRipples, newRipple]);
+    setRipples((prevRipples) => [
+      ...prevRipples,
+      { id: nextId, offsetX, offsetY },
+    ]);
     setNextId((prevId) => prevId + 1);
 
-    if (onClick) onClick(event);
-  };
+    console.log(ripples);
+  }
 
   const handleAnimationEnd = (id: number) => {
     setRipples((prevRipples) =>
@@ -28,12 +25,13 @@ export default function Button({ onClick, children, style }: ButtonProps) {
   };
 
   return (
-    <ButtonStyled onClick={handleClick} style={style}>
+    <ButtonStyled color={color} onClick={handleClick}>
       {children}
+
       {ripples.map(({ id, offsetX, offsetY }) => (
         <span
           key={id}
-          className="ripple-effect"
+          className="ripple"
           style={{
             left: offsetX,
             top: offsetY,
@@ -44,3 +42,5 @@ export default function Button({ onClick, children, style }: ButtonProps) {
     </ButtonStyled>
   );
 }
+
+export default Button;
